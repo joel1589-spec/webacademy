@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block titre %}Mes ressources — Web Academy{% endblock %}
+
+{% block contenu %}
+  <div class="section-titre">
+    <h2>Mes ressources de formation</h2>
+  </div>
+  <p style="color:var(--gris-texte); margin-top:-0.6rem;">
+    Documents, vidéos et liens mis à disposition par votre formateur pour les formations auxquelles vous êtes inscrit(e).
+  </p>
+
+  <div class="grille-cartes">
+    {% for ressource in ressources %}
+      <div class="carte-site">
+        <span class="meta">{{ ressource.get_type_ressource_display }}{% if ressource.formation %} · {{ ressource.formation.nom }}{% endif %}</span>
+        <h3>{{ ressource.titre }}</h3>
+        <p>{{ ressource.description }}</p>
+        {% if ressource.url_acces %}
+          <a class="lien-carte" href="{{ ressource.url_acces }}" target="_blank" rel="noopener">Accéder à la ressource →</a>
+        {% endif %}
+      </div>
+    {% empty %}
+      <div class="carte-site">
+        <p>Aucune ressource n'est disponible pour l'instant. Elles apparaîtront ici dès que votre formateur les publiera.</p>
+      </div>
+    {% endfor %}
+  </div>
+{% endblock %}

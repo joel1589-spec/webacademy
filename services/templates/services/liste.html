@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block titre %}Nos services — Web Academy{% endblock %}
+
+{% block contenu %}
+  <div class="section-titre">
+    <h2>Nos services</h2>
+  </div>
+  <p style="color:var(--gris-texte); margin-top:-0.6rem;">
+    Web Academy accompagne ses apprenants au-delà des cours en salle : voici ce que nous proposons.
+  </p>
+
+  <div class="grille-cartes">
+    {% for service in services %}
+      <div class="carte-site">
+        <div class="icone">{{ service.icone }}</div>
+        <h3>{{ service.titre }}</h3>
+        <p>{{ service.description }}</p>
+      </div>
+    {% empty %}
+      <div class="carte-site"><p>Les services proposés seront bientôt affichés ici.</p></div>
+    {% endfor %}
+  </div>
+{% endblock %}

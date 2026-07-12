@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block titre %}Modifier mon profil — Web Academy{% endblock %}
+{% block enveloppe_modif %}-etroite{% endblock %}
+
+{% block contenu %}
+  <div class="carte-formulaire">
+    <h1>Modifier mon profil</h1>
+    <p class="sous-titre">Mettez à jour vos informations personnelles.</p>
+
+    <form method="post" enctype="multipart/form-data" class="formulaire-site">
+      {% csrf_token %}
+      {% for field in form %}
+        <div class="champ">
+          <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+          {{ field }}
+          {% if field.help_text %}<span class="aide">{{ field.help_text }}</span>{% endif %}
+          {% for error in field.errors %}<span class="erreur">{{ error }}</span>{% endfor %}
+        </div>
+      {% endfor %}
+      <button type="submit" class="bouton bouton-navy">Enregistrer</button>
+    </form>
+
+    <p class="lien-secondaire"><a href="{% url 'comptes:mon_espace' %}">← Retour à mon espace</a></p>
+  </div>
+{% endblock %}

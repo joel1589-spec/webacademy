@@ -1,0 +1,40 @@
+{% extends "attestations/base.html" %}
+
+{% block titre %}À propos de Web Academy{% endblock %}
+
+{% block contenu %}
+<div class="carte page-texte" style="text-align:left;">
+  <h1>À propos de Web Academy</h1>
+
+  <p>
+    Web Academy est une structure de formation portée par <strong>Joël KPETO</strong>,
+    formateur indépendant, proposant des sessions pratiques en développement web
+    (HTML, CSS, JavaScript) et autres compétences numériques.
+  </p>
+
+  <h2>Nos formations</h2>
+  <p>
+    Chaque session se déroule sur plusieurs semaines, avec un volume horaire défini
+    et un accompagnement personnalisé des apprenants jusqu'à la réalisation de
+    projets concrets.
+  </p>
+
+  <h2>Statut des attestations</h2>
+  <div class="encadre-avertissement">
+    Web Academy est une formation dispensée par un formateur indépendant.
+    Les attestations délivrées certifient la participation et l'assiduité à la
+    formation ; elles ne constituent pas un diplôme d'État. Ce site permet
+    uniquement de vérifier l'authenticité d'une attestation délivrée par
+    Web Academy.
+  </div>
+
+  <h2>Contact</h2>
+  <p>
+    Pour toute question sur une formation ou une attestation, vous pouvez
+    contacter Joël KPETO à l'adresse indiquée sur le document remis, ou via
+    les coordonnées communiquées lors de la formation.
+  </p>
+
+  <a class="lien-retour" href="{% url 'attestations:accueil' %}">&larr; Retour à la vérification</a>
+</div>
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends "attestations/base.html" %}
+
+{% block titre %}Mentions légales et confidentialité — Web Academy{% endblock %}
+
+{% block contenu %}
+<div class="carte page-texte" style="text-align:left;">
+  <h1>Mentions légales et confidentialité</h1>
+
+  <h2>Éditeur du site</h2>
+  <p>
+    Ce site est édité par Joël KPETO, formateur indépendant, dans le cadre de
+    l'activité Web Academy.
+  </p>
+
+  <h2>Données publiées</h2>
+  <p>
+    Pour chaque attestation vérifiée, les informations suivantes peuvent être
+    affichées publiquement : prénom et initiale du nom (ou nom complet en cas
+    d'accord explicite de l'apprenant), intitulé de la formation, dates de la
+    formation, volume horaire et date de délivrance. Aucune coordonnée
+    personnelle (adresse, téléphone, email) ni aucune évaluation ou note
+    détaillée n'est publiée.
+  </p>
+
+  <h2>Consentement</h2>
+  <p>
+    Lors de son inscription, chaque apprenant est informé que ces informations
+    seront publiées sur ce site de vérification, et son accord est recueilli
+    avant la délivrance de l'attestation.
+  </p>
+
+  <h2>Accès et recherche</h2>
+  <p>
+    La consultation d'une attestation nécessite de connaître le numéro complet
+    imprimé sur le document (y compris son code de vérification aléatoire).
+    Il n'est pas possible de lister l'ensemble des attestations délivrées
+    depuis ce site.
+  </p>
+
+  <h2>Droit de retrait</h2>
+  <p>
+    Tout ancien apprenant peut demander la modification ou le retrait de ses
+    informations en contactant Web Academy via les coordonnées communiquées
+    lors de sa formation.
+  </p>
+
+  <a class="lien-retour" href="{% url 'attestations:accueil' %}">&larr; Retour à la vérification</a>
+</div>
+{% endblock %}

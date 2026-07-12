@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block titre %}Messagerie — Web Academy{% endblock %}
+{% block enveloppe_modif %}-etroite{% endblock %}
+
+{% block contenu %}
+  <div class="carte-formulaire">
+    <h1>💬 Messagerie avec le formateur</h1>
+    <p class="sous-titre">
+      Posez vos questions directement à votre formateur. Vous recevrez sa réponse ici.
+    </p>
+
+    <div class="fil-messages">
+      {% for message in fil %}
+        <div class="bulle-message {% if message.expediteur.is_staff %}bulle-formateur{% else %}bulle-moi{% endif %}">
+          <p class="bulle-auteur">{% if message.expediteur.is_staff %}Le formateur{% else %}Vous{% endif %} · {{ message.date_envoi|date:"d/m/Y H:i" }}</p>
+          <p class="bulle-contenu">{{ message.contenu|linebreaksbr }}</p>
+        </div>
+      {% empty %}
+        <p style="color:var(--gris-texte); text-align:center;">
+          Aucun message pour le moment. Envoyez votre premier message ci-dessous !
+        </p>
+      {% endfor %}
+    </div>
+
+    <form method="post" class="formulaire-site" style="margin-top:1.4rem;">
+      {% csrf_token %}
+      <div class="champ">
+        <label for="contenu">Votre message</label>
+        <textarea name="contenu" id="contenu" placeholder="Écrivez votre message ici..." required></textarea>
+      </div>
+      <button type="submit" class="bouton bouton-navy">Envoyer</button>
+    </form>
+  </div>
+
+  <p class="lien-secondaire"><a href="{% url 'comptes:mon_espace' %}">← Retour à mon espace</a></p>
+{% endblock %}

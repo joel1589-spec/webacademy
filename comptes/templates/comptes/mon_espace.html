@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block titre %}Mon espace — Web Academy{% endblock %}
+
+{% block contenu %}
+
+  <div class="entete-espace">
+    {% if etudiant.photo %}
+      <img class="avatar-espace" src="{{ etudiant.photo.url }}" alt="Photo de {{ user.first_name }}">
+    {% else %}
+      <div class="avatar-espace">{{ user.first_name|first|upper }}{{ user.last_name|first|upper }}</div>
+    {% endif %}
+    <div>
+      <h1>Bonjour {{ user.first_name }} 👋</h1>
+      <p>{{ user.email }}</p>
+      {% for formation in formations %}
+        <span class="tag-formation">{{ formation.nom }}</span>
+      {% empty %}
+        <span class="tag-formation">Aucune formation associée pour le moment</span>
+      {% endfor %}
+    </div>
+  </div>
+
+  <section class="section-accueil">
+    <div class="section-titre">
+      <h2>Mes ressources récentes</h2>
+      <a class="voir-tout" href="{% url 'ressources:liste' %}">Voir toutes mes ressources →</a>
+    </div>
+    <div class="grille-cartes">
+      {% for ressource in ressources %}
+        <div class="carte-site">
+          <span class="meta">{{ ressource.get_type_ressource_display }}</span>
+          <h3>{{ ressource.titre }}</h3>
+          <p>{{ ressource.description|truncatewords:18 }}</p>
+          {% if ressource.url_acces %}
+            <a class="lien-carte" href="{{ ressource.url_acces }}" target="_blank" rel="noopener">Accéder →</a>
+          {% endif %}
+        </div>
+      {% empty %}
+        <div class="carte-site"><p>Aucune ressource disponible pour l'instant. Revenez bientôt !</p></div>
+      {% endfor %}
+    </div>
+  </section>
+
+  <section class="section-accueil">
+    <div class="section-titre">
+      <h2>Dernières annonces</h2>
+      <a class="voir-tout" href="{% url 'annonces:liste' %}">Toutes les annonces →</a>
+    </div>
+    <div class="grille-cartes">
+      {% for annonce in annonces %}
+        <div class="carte-site">
+          <h3>{{ annonce.titre }}</h3>
+          <p>{{ annonce.contenu|truncatewords:18 }}</p>
+          <a class="lien-carte" href="{% url 'annonces:detail' annonce.pk %}">Lire →</a>
+        </div>
+      {% empty %}
+        <div class="carte-site"><p>Aucune annonce pour le moment.</p></div>
+      {% endfor %}
+    </div>
+  </section>
+
+  <p class="lien-secondaire">
+    <a href="{% url 'comptes:mes_attestations' %}">🎓 Mes attestations</a> ·
+    <a href="{% url 'messagerie:ma_conversation' %}">💬 Messagerie{% if nombre_messages_non_lus %} ({{ nombre_messages_non_lus }}){% endif %}</a> ·
+    <a href="{% url 'comptes:modifier_profil' %}">✏️ Modifier mon profil</a>
+  </p>
+
+{% endblock %}

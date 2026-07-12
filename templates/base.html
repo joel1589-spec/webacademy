@@ -1,0 +1,64 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block titre %}Web Academy{% endblock %}</title>
+  <link rel="icon" href="{% static 'core/img/favicon.ico' %}">
+  <link rel="apple-touch-icon" href="{% static 'core/img/apple-touch-icon.png' %}">
+  <link rel="stylesheet" href="{% static 'core/css/site.css' %}">
+  {% block extra_css %}{% endblock %}
+</head>
+<body>
+  <header class="entete-site">
+    <a href="{% url 'core:accueil' %}" class="logo">
+      <img src="{% static 'core/img/logo-emblem.png' %}" alt="Web Academy" class="logo-image">
+      <span class="logo-texte">Web <span class="accent">Academy</span></span>
+    </a>
+    <nav class="menu-site">
+      <a href="{% url 'core:accueil' %}">Accueil</a>
+      <a href="{% url 'services:liste' %}">Services</a>
+      <a href="{% url 'ressources:liste' %}">Ressources</a>
+      <a href="{% url 'annonces:liste' %}">Annonces</a>
+      <a href="{% url 'blog:liste' %}">Blog</a>
+      <a href="{% url 'attestations:accueil' %}">Vérifier une attestation</a>
+      {% if user.is_authenticated %}
+        {% if user.is_staff %}
+          <a href="{% url 'messagerie:liste_conversations' %}">Messagerie{% if nombre_messages_non_lus %} ({{ nombre_messages_non_lus }}){% endif %}</a>
+        {% else %}
+          <a href="{% url 'comptes:mes_attestations' %}">Mes attestations</a>
+          <a href="{% url 'messagerie:ma_conversation' %}">Messagerie{% if nombre_messages_non_lus %} ({{ nombre_messages_non_lus }}){% endif %}</a>
+        {% endif %}
+        <a href="{% url 'comptes:mon_espace' %}">Mon espace</a>
+        <a href="{% url 'comptes:deconnexion' %}">Déconnexion</a>
+      {% else %}
+        <a href="{% url 'comptes:connexion' %}">Connexion</a>
+        <a href="{% url 'comptes:inscription' %}" class="bouton-cta">S'inscrire</a>
+      {% endif %}
+    </nav>
+  </header>
+
+  {% if messages %}
+    <ul class="messages">
+      {% for message in messages %}
+        <li class="{{ message.tags }}">{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+
+  <main class="contenu-site">
+    <div class="enveloppe{% block enveloppe_modif %}{% endblock %}">
+      {% block contenu %}{% endblock %}
+    </div>
+  </main>
+
+  <footer class="pied-site">
+    &copy; {% now "Y" %} Web Academy — Formation dispensée par un formateur indépendant.
+    <br>
+    <a href="{% url 'attestations:a_propos' %}">À propos</a> ·
+    <a href="{% url 'attestations:mentions_legales' %}">Mentions légales</a> ·
+    <a href="{% url 'attestations:accueil' %}">Vérifier une attestation</a>
+  </footer>
+</body>
+</html>

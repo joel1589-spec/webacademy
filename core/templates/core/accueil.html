@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block titre %}Web Academy — Formations, ressources et accompagnement{% endblock %}
+
+{% block contenu %}
+
+  <div class="hero">
+    <h1>Bienvenue chez Web <span>Academy</span></h1>
+    <p>
+      Web Academy forme aux métiers du numérique (développement web, bureautique, outils
+      digitaux) et accompagne chaque apprenant au-delà de la salle de classe : ressources
+      de cours, suivi personnalisé et attestations vérifiables en ligne.
+    </p>
+    <div class="boutons-hero">
+      {% if user.is_authenticated %}
+        <a href="{% url 'comptes:mon_espace' %}" class="bouton bouton-or">Accéder à mon espace</a>
+      {% else %}
+        <a href="{% url 'comptes:inscription' %}" class="bouton bouton-or">Créer mon compte apprenant</a>
+        <a href="{% url 'comptes:connexion' %}" class="bouton bouton-contour">Se connecter</a>
+      {% endif %}
+      <a href="{% url 'attestations:accueil' %}" class="bouton bouton-contour">Vérifier une attestation</a>
+    </div>
+  </div>
+
+  <section class="section-accueil">
+    <div class="section-titre">
+      <h2>Nos services</h2>
+      <a class="voir-tout" href="{% url 'services:liste' %}">Voir tous les services →</a>
+    </div>
+    <div class="grille-cartes">
+      {% for service in services %}
+        <div class="carte-site">
+          <div class="icone">{{ service.icone }}</div>
+          <h3>{{ service.titre }}</h3>
+          <p>{{ service.description|truncatewords:22 }}</p>
+        </div>
+      {% empty %}
+        <div class="carte-site">
+          <p>Les services proposés par Web Academy seront bientôt affichés ici.</p>
+        </div>
+      {% endfor %}
+    </div>
+  </section>
+
+  <section class="section-accueil">
+    <div class="section-titre">
+      <h2>Dernières annonces</h2>
+      <a class="voir-tout" href="{% url 'annonces:liste' %}">Toutes les annonces →</a>
+    </div>
+    <div class="grille-cartes">
+      {% for annonce in annonces %}
+        <div class="carte-site {% if annonce.epinglee %}epinglee{% endif %}">
+          {% if annonce.epinglee %}<span class="meta">📌 À la une</span>{% endif %}
+          <h3>{{ annonce.titre }}</h3>
+          <p>{{ annonce.contenu|truncatewords:22 }}</p>
+          <a class="lien-carte" href="{% url 'annonces:detail' annonce.pk %}">Lire l'annonce →</a>
+        </div>
+      {% empty %}
+        <div class="carte-site"><p>Aucune annonce pour le moment.</p></div>
+      {% endfor %}
+    </div>
+  </section>
+
+  <section class="section-accueil">
+    <div class="section-titre">
+      <h2>Sur le blog</h2>
+      <a class="voir-tout" href="{% url 'blog:liste' %}">Tous les articles →</a>
+    </div>
+    <div class="grille-cartes">
+      {% for article in articles %}
+        <div class="carte-site">
+          {% if article.categorie %}<span class="meta">{{ article.categorie }}</span>{% endif %}
+          <h3>{{ article.titre }}</h3>
+          <p>{{ article.resume }}</p>
+          <a class="lien-carte" href="{% url 'blog:detail' article.slug %}">Lire l'article →</a>
+        </div>
+      {% empty %}
+        <div class="carte-site"><p>Aucun article publié pour le moment.</p></div>
+      {% endfor %}
+    </div>
+  </section>
+
+{% endblock %}

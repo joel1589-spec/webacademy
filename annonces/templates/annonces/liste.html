@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block titre %}Annonces — Web Academy{% endblock %}
+
+{% block contenu %}
+  <div class="section-titre">
+    <h2>Annonces</h2>
+  </div>
+
+  <div class="grille-cartes">
+    {% for annonce in annonces %}
+      <div class="carte-site {% if annonce.epinglee %}epinglee{% endif %}">
+        {% if annonce.epinglee %}<span class="meta">📌 À la une</span>{% endif %}
+        <h3>{{ annonce.titre }}</h3>
+        <p>{{ annonce.contenu|truncatewords:25 }}</p>
+        <a class="lien-carte" href="{% url 'annonces:detail' annonce.pk %}">Lire la suite →</a>
+      </div>
+    {% empty %}
+      <div class="carte-site"><p>Aucune annonce pour le moment.</p></div>
+    {% endfor %}
+  </div>
+{% endblock %}

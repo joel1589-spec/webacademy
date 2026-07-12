@@ -1,0 +1,37 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block titre %}Vérification des attestations — Web Academy{% endblock %}</title>
+  <link rel="icon" href="{% static 'core/img/favicon.ico' %}">
+  <link rel="apple-touch-icon" href="{% static 'core/img/apple-touch-icon.png' %}">
+  <link rel="stylesheet" href="{% static 'attestations/css/style.css' %}">
+</head>
+<body>
+  <header class="entete">
+    <a href="{% url 'attestations:accueil' %}" class="logo">
+      <img src="{% static 'core/img/logo-emblem.png' %}" alt="Web Academy" style="height:36px; width:36px; object-fit:contain; background:#fff; border-radius:8px; padding:2px; vertical-align:middle; margin-right:0.5rem;">
+      Web <span>Academy</span>
+    </a>
+    <nav class="menu-principal">
+      <a href="{% url 'core:accueil' %}">← Retour au site Web Academy</a>
+      <a href="{% url 'attestations:accueil' %}">Vérifier</a>
+      <a href="{% url 'attestations:a_propos' %}">À propos</a>
+      <a href="{% url 'attestations:mentions_legales' %}">Mentions légales</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="conteneur-central">
+      {% block contenu %}{% endblock %}
+    </div>
+  </main>
+
+  <footer class="pied-de-page">
+    &copy; {% now "Y" %} Web Academy — Outil de vérification d'authenticité des attestations.
+    Ceci n'est pas une certification d'État.
+  </footer>
+</body>
+</html>

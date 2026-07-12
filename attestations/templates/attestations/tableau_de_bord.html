@@ -1,0 +1,63 @@
+{% extends "attestations/base.html" %}
+
+{% block titre %}Tableau de bord — Web Academy{% endblock %}
+
+{% block contenu %}
+<div class="carte page-texte" style="text-align:left; max-width:900px;">
+  <h1>Tableau de bord</h1>
+  <p class="sous-titre">Bienvenue {{ request.user.get_username }}. Aperçu rapide des attestations délivrées.</p>
+
+  <div class="cartes-stats">
+    <div class="carte-stat">
+      <div class="chiffre">{{ total }}</div>
+      <div class="libelle">Attestations au total</div>
+    </div>
+    <div class="carte-stat">
+      <div class="chiffre">{{ total_valides }}</div>
+      <div class="libelle">Valides</div>
+    </div>
+    <div class="carte-stat">
+      <div class="chiffre">{{ total_revoquees }}</div>
+      <div class="libelle">Révoquées</div>
+    </div>
+    <div class="carte-stat">
+      <div class="chiffre">{{ nombre_formations }}</div>
+      <div class="libelle">Formations proposées</div>
+    </div>
+  </div>
+
+  <h2>Par formation</h2>
+  <table class="tableau-stats">
+    <thead><tr><th>Formation</th><th>Nombre d'attestations</th></tr></thead>
+    <tbody>
+      {% for ligne in par_formation %}
+      <tr><td>{{ ligne.formation__nom }}</td><td>{{ ligne.total }}</td></tr>
+      {% empty %}
+      <tr><td colspan="2">Aucune attestation enregistrée pour le moment.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <h2>Par session</h2>
+  <table class="tableau-stats">
+    <thead><tr><th>Session</th><th>Année</th><th>Nombre d'attestations</th></tr></thead>
+    <tbody>
+      {% for ligne in par_session %}
+      <tr>
+        <td>{{ ligne.session_label|default:"—" }} (S{{ ligne.numero_session }})</td>
+        <td>{{ ligne.annee_session }}</td>
+        <td>{{ ligne.total }}</td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="3">Aucune session enregistrée pour le moment.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <p>
+    <a class="bouton or" href="/admin/attestations/attestation/" style="text-decoration:none; display:inline-block;">
+      Gérer les attestations (ajouter / modifier / exporter)
+    </a>
+  </p>
+</div>
+{% endblock %}

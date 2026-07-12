@@ -1,0 +1,61 @@
+{% extends "attestations/base.html" %}
+
+{% block titre %}Résultat de la vérification — Web Academy{% endblock %}
+
+{% block contenu %}
+<div class="carte">
+  {% if trouvee %}
+    {% if attestation.est_valide %}
+      <div class="badge valide">✅ Attestation authentique</div>
+    {% else %}
+      <div class="badge revoquee">⚠️ Attestation révoquée</div>
+    {% endif %}
+
+    <h1>{{ attestation.nom_affiche }}</h1>
+
+    <div class="details-attestation">
+      <dl>
+        <dt>Numéro d'attestation</dt>
+        <dd>{{ attestation.numero_attestation }}</dd>
+
+        <dt>Formation suivie</dt>
+        <dd>{{ attestation.formation.nom }}</dd>
+
+        <dt>Période de formation</dt>
+        <dd>Du {{ attestation.date_debut|date:"d/m/Y" }} au {{ attestation.date_fin|date:"d/m/Y" }}</dd>
+
+        <dt>Volume horaire</dt>
+        <dd>{{ attestation.volume_horaire }} heures</dd>
+
+        <dt>Date de délivrance</dt>
+        <dd>{{ attestation.date_delivrance|date:"d/m/Y" }}</dd>
+
+        {% if attestation.session_label %}
+        <dt>Session</dt>
+        <dd>{{ attestation.session_label }}</dd>
+        {% endif %}
+      </dl>
+    </div>
+
+    {% if not attestation.est_valide %}
+      <p style="margin-top:1.2rem; font-size:0.9rem; color:var(--red);">
+        Cette attestation a été marquée comme révoquée par Web Academy et ne doit plus être considérée comme valable.
+      </p>
+    {% endif %}
+
+  {% else %}
+    <div class="badge introuvable">❌ Aucune attestation trouvée</div>
+    <h1>Numéro introuvable</h1>
+    <p class="sous-titre">
+      {% if numero_recherche %}
+        Aucune attestation ne correspond au numéro « {{ numero_recherche }} ».
+      {% else %}
+        Aucun numéro n'a été saisi.
+      {% endif %}
+      Vérifiez la saisie ou contactez Web Academy pour toute question.
+    </p>
+  {% endif %}
+
+  <a class="lien-retour" href="{% url 'attestations:accueil' %}">&larr; Faire une nouvelle recherche</a>
+</div>
+{% endblock %}

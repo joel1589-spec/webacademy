@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block titre %}Conversation avec {{ conversation.etudiant }} — Web Academy{% endblock %}
+{% block enveloppe_modif %}-etroite{% endblock %}
+
+{% block contenu %}
+  <div class="carte-formulaire">
+    <h1>💬 {{ conversation.etudiant }}</h1>
+    <p class="sous-titre">{{ conversation.etudiant.user.email }}</p>
+
+    <div class="fil-messages">
+      {% for message in fil %}
+        <div class="bulle-message {% if message.expediteur.is_staff %}bulle-moi{% else %}bulle-formateur{% endif %}">
+          <p class="bulle-auteur">{% if message.expediteur.is_staff %}Vous{% else %}{{ conversation.etudiant }}{% endif %} · {{ message.date_envoi|date:"d/m/Y H:i" }}</p>
+          <p class="bulle-contenu">{{ message.contenu|linebreaksbr }}</p>
+        </div>
+      {% empty %}
+        <p style="color:var(--gris-texte); text-align:center;">Aucun message pour l'instant.</p>
+      {% endfor %}
+    </div>
+
+    <form method="post" class="formulaire-site" style="margin-top:1.4rem;">
+      {% csrf_token %}
+      <div class="champ">
+        <label for="contenu">Votre réponse</label>
+        <textarea name="contenu" id="contenu" placeholder="Écrivez votre réponse ici..." required></textarea>
+      </div>
+      <button type="submit" class="bouton bouton-navy">Répondre</button>
+    </form>
+  </div>
+
+  <p class="lien-secondaire"><a href="{% url 'messagerie:liste_conversations' %}">← Toutes les conversations</a></p>
+{% endblock %}

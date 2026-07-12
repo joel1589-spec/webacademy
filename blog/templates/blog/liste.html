@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block titre %}Blog — Web Academy{% endblock %}
+
+{% block contenu %}
+  <div class="section-titre">
+    <h2>Blog</h2>
+  </div>
+
+  <div class="grille-cartes">
+    {% for article in articles %}
+      <div class="carte-site">
+        {% if article.categorie %}<span class="meta">{{ article.categorie }}</span>{% endif %}
+        <h3>{{ article.titre }}</h3>
+        <p>{{ article.resume }}</p>
+        <a class="lien-carte" href="{% url 'blog:detail' article.slug %}">Lire l'article →</a>
+      </div>
+    {% empty %}
+      <div class="carte-site"><p>Aucun article publié pour le moment.</p></div>
+    {% endfor %}
+  </div>
+{% endblock %}

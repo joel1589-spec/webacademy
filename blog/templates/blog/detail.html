@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block titre %}{{ article.titre }} — Blog Web Academy{% endblock %}
+{% block enveloppe_modif %}-etroite{% endblock %}
+
+{% block contenu %}
+  <div class="carte-formulaire">
+    {% if article.image %}
+      <img src="{{ article.image.url }}" alt="{{ article.titre }}" style="width:100%; border-radius:10px; margin-bottom:1.2rem;">
+    {% endif %}
+    {% if article.categorie %}<span class="meta">{{ article.categorie }}</span>{% endif %}
+    <h1>{{ article.titre }}</h1>
+    <p class="sous-titre">
+      Par {{ article.auteur.first_name|default:"Web Academy" }} — {{ article.date_publication|date:"d/m/Y" }}
+    </p>
+    <div style="color:var(--navy); line-height:1.7; white-space:pre-line;">{{ article.contenu }}</div>
+  </div>
+  <p class="lien-secondaire"><a href="{% url 'blog:liste' %}">← Tous les articles</a></p>
+{% endblock %}

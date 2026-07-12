@@ -1,0 +1,20 @@
+{% extends "attestations/base.html" %}
+
+{% block titre %}Vérifier une attestation — Web Academy{% endblock %}
+
+{% block contenu %}
+<div class="carte">
+  <h1>Vérifier une attestation</h1>
+  <p class="sous-titre">
+    Entrez le numéro inscrit sur l'attestation pour confirmer instantanément son authenticité.
+  </p>
+
+  <form class="recherche" action="{% url 'attestations:verifier' %}" method="get">
+    <label for="id_numero" style="text-align:left; font-size:0.85rem; color:var(--gris-texte);">
+      Numéro d'attestation
+    </label>
+    {{ form.numero }}
+    <button type="submit" class="bouton">Vérifier</button>
+  </form>
+</div>
+{% endblock %}

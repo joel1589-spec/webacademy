@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block titre %}Connexion — Web Academy{% endblock %}
+{% block enveloppe_modif %}-etroite{% endblock %}
+
+{% block contenu %}
+  <div class="carte-formulaire">
+    <h1>Connexion</h1>
+    <p class="sous-titre">Accédez à votre espace apprenant Web Academy.</p>
+
+    {% if form.non_field_errors %}
+      {% for error in form.non_field_errors %}<p class="erreur">{{ error }}</p>{% endfor %}
+    {% endif %}
+
+    <form method="post" class="formulaire-site">
+      {% csrf_token %}
+      {% for field in form %}
+        <div class="champ">
+          <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+          {{ field }}
+          {% for error in field.errors %}<span class="erreur">{{ error }}</span>{% endfor %}
+        </div>
+      {% endfor %}
+      <input type="hidden" name="next" value="{{ next }}">
+      <button type="submit" class="bouton bouton-navy">Se connecter</button>
+    </form>
+
+    <p class="lien-secondaire">Pas encore de compte ? <a href="{% url 'comptes:inscription' %}">Créer un compte</a></p>
+  </div>
+{% endblock %}

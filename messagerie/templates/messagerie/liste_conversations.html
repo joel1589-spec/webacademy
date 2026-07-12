@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block titre %}Messagerie — Boîte de réception{% endblock %}
+
+{% block contenu %}
+  <div class="section-titre">
+    <h2>💬 Messagerie — vos apprenants</h2>
+  </div>
+
+  <div class="carte-formulaire" style="padding:0; overflow:hidden;">
+    {% for ligne in lignes %}
+      <a href="{% url 'messagerie:conversation_detail' ligne.conversation.id %}" class="ligne-conversation {% if ligne.non_lus %}ligne-non-lue{% endif %}">
+        <div>
+          <strong>{{ ligne.conversation.etudiant }}</strong>
+          <p>{{ ligne.dernier.contenu|default:"Aucun message"|truncatewords:16 }}</p>
+        </div>
+        <div class="ligne-meta">
+          {% if ligne.dernier %}<span>{{ ligne.dernier.date_envoi|date:"d/m/Y H:i" }}</span>{% endif %}
+          {% if ligne.non_lus %}<span class="badge-non-lu">{{ ligne.non_lus }}</span>{% endif %}
+        </div>
+      </a>
+    {% empty %}
+      <p style="padding:1.6rem; color:var(--gris-texte);">Aucune conversation pour le moment.</p>
+    {% endfor %}
+  </div>
+{% endblock %}

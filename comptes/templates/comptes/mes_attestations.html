@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block titre %}Mes attestations — Web Academy{% endblock %}
+
+{% block contenu %}
+  <div class="section-titre">
+    <h2>🎓 Mes attestations</h2>
+  </div>
+  <p style="color:var(--gris-texte); margin-top:-0.6rem;">
+    Les attestations délivrées à votre nom sont automatiquement associées à votre compte.
+    Si l'une de vos attestations n'apparaît pas ci-dessous, ajoutez-la manuellement avec son numéro.
+  </p>
+
+  {% if attestations %}
+    <table class="tableau-attestations">
+      <thead>
+        <tr>
+          <th>Numéro</th>
+          <th>Formation</th>
+          <th>Période</th>
+          <th>Statut</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for attestation in attestations %}
+          <tr>
+            <td><a href="{% url 'attestations:verifier' %}?numero={{ attestation.numero_attestation }}">{{ attestation.numero_attestation }}</a></td>
+            <td>{{ attestation.formation.nom }}</td>
+            <td>{{ attestation.date_debut|date:"d/m/Y" }} – {{ attestation.date_fin|date:"d/m/Y" }}</td>
+            <td>
+              {% if attestation.est_valide %}
+                <span class="badge-statut valide">Valide</span>
+              {% else %}
+                <span class="badge-statut revoquee">Révoquée</span>
+              {% endif %}
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <div class="carte-site"><p>Aucune attestation associée à votre compte pour l'instant.</p></div>
+  {% endif %}
+
+  <div class="carte-formulaire" style="margin-top:2rem;">
+    <h1 style="font-size:1.15rem;">Associer une attestation manuellement</h1>
+    <p class="sous-titre">
+      Saisissez le numéro complet inscrit sur votre attestation papier (ex : WA-2026-S1-014-7X2K).
+    </p>
+    <form method="post" class="formulaire-site">
+      {% csrf_token %}
+      <div class="champ">
+        <label for="{{ form.numero_attestation.id_for_label }}">Numéro d'attestation</label>
+        {{ form.numero_attestation }}
+        {% for error in form.numero_attestation.errors %}<span class="erreur">{{ error }}</span>{% endfor %}
+      </div>
+      <button type="submit" class="bouton bouton-navy">Associer</button>
+    </form>
+  </div>
+
+  <p class="lien-secondaire"><a href="{% url 'comptes:mon_espace' %}">← Retour à mon espace</a></p>
+{% endblock %}

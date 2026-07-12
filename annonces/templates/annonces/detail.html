@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block titre %}{{ annonce.titre }} — Web Academy{% endblock %}
+{% block enveloppe_modif %}-etroite{% endblock %}
+
+{% block contenu %}
+  <div class="carte-formulaire">
+    {% if annonce.image %}
+      <img src="{{ annonce.image.url }}" alt="{{ annonce.titre }}" style="width:100%; border-radius:10px; margin-bottom:1.2rem;">
+    {% endif %}
+    <h1>{{ annonce.titre }}</h1>
+    <p class="sous-titre">Publiée le {{ annonce.date_publication|date:"d/m/Y à H:i" }}</p>
+    <div style="color:var(--navy); line-height:1.7; white-space:pre-line;">{{ annonce.contenu }}</div>
+  </div>
+  <p class="lien-secondaire"><a href="{% url 'annonces:liste' %}">← Toutes les annonces</a></p>
+{% endblock %}

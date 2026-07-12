@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block titre %}Créer mon compte — Web Academy{% endblock %}
+{% block enveloppe_modif %}-etroite{% endblock %}
+
+{% block contenu %}
+  <div class="carte-formulaire">
+    <h1>Créer mon compte apprenant</h1>
+    <p class="sous-titre">
+      Créez votre compte pour accéder à vos ressources de formation et suivre vos attestations.
+    </p>
+
+    <form method="post" class="formulaire-site">
+      {% csrf_token %}
+      {% for field in form %}
+        <div class="champ">
+          <label for="{{ field.id_for_label }}">{{ field.label }}{% if field.field.required %} *{% endif %}</label>
+          {{ field }}
+          {% if field.help_text %}<span class="aide">{{ field.help_text }}</span>{% endif %}
+          {% for error in field.errors %}<span class="erreur">{{ error }}</span>{% endfor %}
+        </div>
+      {% endfor %}
+      <button type="submit" class="bouton bouton-navy">Créer mon compte</button>
+    </form>
+
+    <p class="lien-secondaire">Déjà inscrit ? <a href="{% url 'comptes:connexion' %}">Se connecter</a></p>
+  </div>
+{% endblock %}
