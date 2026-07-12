@@ -93,8 +93,10 @@ WSGI_APPLICATION = 'webacademy_verif.wsgi.application'
 
 # --- Base de données ----------------------------------------------------------
 # En local (pas de DATABASE_URL) : SQLite, aucune config nécessaire.
-# Sur Render : PostgreSQL, via la variable DATABASE_URL que Render fournit
-# automatiquement quand la base est reliée au service web.
+# En production : PostgreSQL externe (Neon), via la variable DATABASE_URL.
+# conn_max_age=0 : Neon est une base "serverless" qui peut mettre la connexion
+# en veille ; on désactive donc la persistance de connexion Django pour éviter
+# des erreurs de connexion "périmée" après une période d'inactivité.
 
 import dj_database_url
 
@@ -130,6 +132,9 @@ STATICFILES_DIRS = [
 ]
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
     "staticfiles": {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
     },
