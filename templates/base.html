@@ -16,6 +16,10 @@
       <img src="{% static 'core/img/logo-emblem.png' %}" alt="Web Academy" class="logo-image">
       <span class="logo-texte">Web <span class="accent">Academy</span></span>
     </a>
+
+    <input type="checkbox" id="menu-toggle" class="menu-toggle-case">
+    <label for="menu-toggle" class="menu-toggle-bouton" aria-label="Ouvrir le menu">☰</label>
+
     <nav class="menu-site">
       <a href="{% url 'core:accueil' %}">Accueil</a>
       <a href="{% url 'services:liste' %}">Services</a>

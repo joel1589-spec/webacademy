@@ -90,6 +90,19 @@ nav.menu-site a.bouton-cta {
 
 nav.menu-site a.bouton-cta:hover { background: var(--gold-light); text-decoration: none; }
 
+/* Bouton hamburger et case à cocher : invisibles sur grand écran,
+   activés uniquement par la media query mobile plus bas. */
+.menu-toggle-case { display: none; }
+.menu-toggle-bouton {
+  display: none;
+  cursor: pointer;
+  font-size: 1.7rem;
+  line-height: 1;
+  color: var(--blanc);
+  padding: 0.2rem 0.4rem;
+  user-select: none;
+}
+
 /* --- Messages Django ----------------------------------------------------- */
 
 .messages { list-style: none; padding: 0; margin: 1rem auto; max-width: 900px; width: 100%; }
@@ -423,8 +436,48 @@ footer.pied-site a:hover { text-decoration: underline; }
 .badge-statut.valide { background: #e3f6ea; color: var(--green); }
 .badge-statut.revoquee { background: #fdecea; color: var(--red); }
 
+@media (max-width: 860px) {
+  header.entete-site {
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.9rem 1.1rem;
+  }
+
+  .menu-toggle-bouton { display: block; }
+
+  nav.menu-site {
+    display: none;
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    flex-basis: 100%;
+    gap: 0;
+    margin-top: 0.9rem;
+    background: var(--navy-light);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .menu-toggle-case:checked ~ nav.menu-site { display: flex; }
+
+  nav.menu-site a {
+    padding: 0.9rem 1rem;
+    font-size: 1rem;
+    white-space: normal;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  nav.menu-site a:last-child { border-bottom: none; }
+
+  nav.menu-site a.bouton-cta {
+    margin: 0.8rem 1rem;
+    text-align: center;
+    padding: 0.7rem 0.9rem;
+  }
+}
+
 @media (max-width: 640px) {
-  header.entete-site { flex-direction: column; align-items: flex-start; }
   .hero { padding: 2.2rem 1.3rem; }
   .hero h1 { font-size: 1.55rem; }
   .entete-espace { flex-direction: column; text-align: center; }
