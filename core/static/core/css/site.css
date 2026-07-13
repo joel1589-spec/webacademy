@@ -205,12 +205,31 @@ section.section-accueil { margin-bottom: 2.6rem; }
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.carte-site:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 34px rgba(10, 31, 68, 0.14);
 }
 
 .carte-site h3 { margin: 0; font-size: 1.08rem; color: var(--navy); }
 .carte-site p { margin: 0; color: var(--gris-texte); font-size: 0.92rem; line-height: 1.5; }
 .carte-site .meta { font-size: 0.78rem; color: var(--gold); font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; }
-.carte-site .icone { font-size: 1.8rem; }
+
+.carte-site .icone {
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  background: rgba(10, 31, 68, 0.07);
+  color: var(--navy);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.35rem;
+  margin-bottom: 0.3rem;
+}
+
 .carte-site a.lien-carte { margin-top: auto; font-size: 0.86rem; font-weight: 600; color: var(--navy-light); text-decoration: none; }
 .carte-site a.lien-carte:hover { text-decoration: underline; }
 
