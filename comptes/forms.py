@@ -17,6 +17,15 @@ class InscriptionForm(UserCreationForm):
         model = User
         fields = ['first_name', 'last_name', 'email', 'username', 'password1', 'password2']
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Les textes d'aide par défaut de Django sont très longs (plusieurs
+        # puces techniques) : on les remplace par une seule phrase courte,
+        # plus adaptée à un formulaire grand public.
+        self.fields['username'].help_text = "Lettres, chiffres et @ . + - _ uniquement."
+        self.fields['password1'].help_text = "8 caractères minimum, évitez un mot de passe trop simple."
+        self.fields['password2'].help_text = "Ressaisissez le même mot de passe."
+
     def clean_email(self):
         email = self.cleaned_data['email']
         if User.objects.filter(email__iexact=email).exists():
