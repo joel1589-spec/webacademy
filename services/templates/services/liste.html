@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load icones %}
 
 {% block titre %}Nos services — Web Academy{% endblock %}
 
@@ -13,7 +14,7 @@
   <div class="grille-cartes">
     {% for service in services %}
       <div class="carte-site">
-        <div class="icone">{{ service.icone }}</div>
+        <div class="icone">{{ service.icone|icone_vecteur }}</div>
         <h3>{{ service.titre }}</h3>
         <p>{{ service.description }}</p>
       </div>

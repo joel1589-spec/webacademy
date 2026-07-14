@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block titre %}Assistant IA — Web Academy{% endblock %}
+{% block enveloppe_modif %}-etroite{% endblock %}
+
+{% block contenu %}
+  <div class="carte-formulaire">
+    <h1>🤖 Assistant IA</h1>
+    <p class="sous-titre">
+      Pose toutes tes questions — sur les cours ou autre chose — à l'assistant IA de Web Academy.
+      ({{ questions_du_jour }}/{{ quota }} questions posées aujourd'hui)
+    </p>
+
+    <div class="fil-messages">
+      {% for message in fil %}
+        <div class="bulle-message {% if message.role == 'ia' %}bulle-formateur{% else %}bulle-moi{% endif %}">
+          <p class="bulle-auteur">{% if message.role == 'ia' %}Assistant IA{% else %}Vous{% endif %} · {{ message.date_envoi|date:"d/m/Y H:i" }}</p>
+          <p class="bulle-contenu">{{ message.contenu|linebreaksbr }}</p>
+        </div>
+      {% empty %}
+        <p style="color:var(--gris-texte); text-align:center;">
+          Aucune question pour le moment. Pose ta première question ci-dessous !
+        </p>
+      {% endfor %}
+    </div>
+
+    {% if quota_atteint %}
+      <p style="color:var(--red); text-align:center; margin-top:1rem;">
+        Vous avez atteint la limite de {{ quota }} questions pour aujourd'hui. Revenez demain !
+      </p>
+    {% else %}
+      <form method="post" class="formulaire-site" style="margin-top:1.4rem;">
+        {% csrf_token %}
+        <div class="champ">
+          <label for="contenu">Votre question</label>
+          <textarea name="contenu" id="contenu" placeholder="Écrivez votre question ici..." required></textarea>
+        </div>
+        <button type="submit" class="bouton bouton-navy">Envoyer</button>
+      </form>
+    {% endif %}
+  </div>
+
+  <p class="lien-secondaire"><a href="{% url 'comptes:mon_espace' %}">← Retour à mon espace</a></p>
+{% endblock %}

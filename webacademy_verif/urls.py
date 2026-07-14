@@ -14,6 +14,7 @@ urlpatterns = [
     path('annonces/', include('annonces.urls')),
     path('blog/', include('blog.urls')),
     path('messagerie/', include('messagerie.urls')),
+    path('assistant/', include('assistant.urls')),
 ]
 
 if settings.DEBUG:

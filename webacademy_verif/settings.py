@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     'annonces',
     'blog',
     'messagerie',
+    'assistant',
 ]
 
 MIDDLEWARE = [
@@ -146,6 +147,20 @@ MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# --- Assistant IA (RodiumAI) -----------------------------------------------------
+# RodiumAI est une passerelle qui donne accès à plusieurs IA (Claude, GPT,
+# Gemini...) via une seule clé, avec une API compatible OpenAI. La clé ne doit
+# JAMAIS être écrite ici : elle est définie en variable d'environnement
+# (RODIUMAI_API_KEY), sur Render dans Environment Variables.
+RODIUMAI_API_KEY = os.environ.get('RODIUMAI_API_KEY', '')
+RODIUMAI_BASE_URL = os.environ.get('RODIUMAI_BASE_URL', 'https://api.rodiumai.io/v1')
+# Identifiant du modèle au format "fournisseur/modèle", ex : anthropic/claude-3-5-sonnet,
+# openai/gpt-4o, google/gemini-1.5-pro... Voir https://www.rodiumai.io/models
+RODIUMAI_MODEL = os.environ.get('RODIUMAI_MODEL', 'anthropic/claude-3-5-sonnet')
+# Nombre maximum de questions qu'un même apprenant peut poser par jour (protection
+# contre un usage abusif de la clé API, qui a un coût réel).
+ASSISTANT_QUOTA_QUOTIDIEN = int(os.environ.get('ASSISTANT_QUOTA_QUOTIDIEN', '30'))
 
 # --- Connexion / déconnexion ----------------------------------------------------
 # Le formateur se connecte via /admin/ (back-office Django) pour gérer les
