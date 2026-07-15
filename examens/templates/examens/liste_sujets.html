@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block titre %}Interrogations & devoirs — Web Academy{% endblock %}
+
+{% block contenu %}
+  <h1>📝 Interrogations & devoirs</h1>
+  <p class="sous-titre">Retrouve ici les sujets mis en ligne par ton formateur.</p>
+
+  <div class="grille-cartes">
+    {% for ligne in lignes %}
+      <div class="carte-site">
+        <h3>{{ ligne.sujet.titre }}</h3>
+        <p>{{ ligne.sujet.nombre_questions }} question(s) · {{ ligne.sujet.duree_minutes }} min · noté sur {{ ligne.sujet.note_totale }}</p>
+
+        {% if ligne.copie and ligne.copie.terminee %}
+          <p><strong>Terminé</strong> — Note obtenue : {{ ligne.copie.note_obtenue }}/{{ ligne.copie.note_sur }}</p>
+          <a class="lien-carte" href="{% url 'examens:resultat_copie' ligne.copie.id %}">Voir ma correction →</a>
+        {% elif ligne.copie %}
+          <p><strong>En cours</strong> — tu as déjà commencé ce sujet.</p>
+          <a class="lien-carte" href="{% url 'examens:traiter_sujet' ligne.sujet.id %}">Continuer →</a>
+        {% else %}
+          <a class="lien-carte" href="{% url 'examens:traiter_sujet' ligne.sujet.id %}">Commencer →</a>
+        {% endif %}
+      </div>
+    {% empty %}
+      <p style="color:var(--gris-texte);">Aucun sujet disponible pour le moment.</p>
+    {% endfor %}
+  </div>
+
+  <p class="lien-secondaire"><a href="{% url 'comptes:mon_espace' %}">← Retour à mon espace</a></p>
+{% endblock %}

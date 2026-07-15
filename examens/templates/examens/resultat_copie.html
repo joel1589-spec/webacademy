@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block titre %}Résultat — {{ copie.sujet.titre }} — Web Academy{% endblock %}
+
+{% block contenu %}
+  <div class="carte-formulaire">
+    <h1>{{ copie.sujet.titre }}</h1>
+    <p style="font-size:1.3rem; font-weight:700; color:var(--navy);">
+      Note obtenue : <span style="color:var(--gold);">{{ copie.note_obtenue }}</span> / {{ copie.note_sur }}
+    </p>
+    <p style="color:var(--gris-texte); font-size:0.85rem;">Copie soumise le {{ copie.date_soumission|date:"d/m/Y à H:i" }}</p>
+
+    {% for ligne in details %}
+      <div class="carte-site" style="margin-bottom:1rem; {% if ligne.correcte %}border-left:4px solid var(--green);{% else %}border-left:4px solid var(--red);{% endif %}">
+        <p style="font-weight:700; margin:0 0 0.5rem;">
+          {{ forloop.counter }}. {{ ligne.question.enonce }}
+          — {{ ligne.reponse.points_obtenus|default:0 }}/{{ ligne.question.points }} pt
+        </p>
+
+        {% if ligne.question.type_question == 'courte' %}
+          <p style="margin:0.2rem 0;">Ta réponse : <em>{{ ligne.reponse.texte_libre|default:"(vide)" }}</em></p>
+          {% if not ligne.correcte %}
+            <p style="margin:0.2rem 0; color:var(--gris-texte);">
+              Réponse(s) attendue(s) :
+              {% for r in ligne.question.reponses_acceptees.all %}{{ r.texte }}{% if not forloop.last %}, {% endif %}{% endfor %}
+            </p>
+          {% endif %}
+        {% else %}
+          {% for choix in ligne.question.choix_possibles.all %}
+            <p style="margin:0.15rem 0;">
+              {% if choix in ligne.reponse.choix_selectionnes.all %}☑{% else %}☐{% endif %}
+              {{ choix.texte }}
+              {% if choix.est_correct %}<span style="color:var(--green); font-size:0.8rem;">(bonne réponse)</span>{% endif %}
+            </p>
+          {% endfor %}
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+
+  <p class="lien-secondaire"><a href="{% url 'examens:liste_sujets' %}">← Retour aux sujets</a></p>
+{% endblock %}

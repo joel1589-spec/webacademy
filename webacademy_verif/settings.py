@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'blog',
     'messagerie',
     'assistant',
+    'examens',
 ]
 
 MIDDLEWARE = [

@@ -32,6 +32,7 @@
           <a href="{% url 'messagerie:liste_conversations' %}">Messagerie{% if nombre_messages_non_lus %} ({{ nombre_messages_non_lus }}){% endif %}</a>
         {% else %}
           <a href="{% url 'comptes:mes_attestations' %}">Mes attestations</a>
+          <a href="{% url 'examens:liste_sujets' %}">Interrogations & devoirs</a>
           <a href="{% url 'assistant:mon_assistant' %}">Assistant IA</a>
           <a href="{% url 'messagerie:ma_conversation' %}">Messagerie{% if nombre_messages_non_lus %} ({{ nombre_messages_non_lus }}){% endif %}</a>
         {% endif %}

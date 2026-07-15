@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block titre %}{{ sujet.titre }} — Web Academy{% endblock %}
+
+{% block contenu %}
+  <div class="carte-formulaire">
+    <div style="display:flex; justify-content:space-between; align-items:center; gap:1rem; flex-wrap:wrap;">
+      <h1 style="margin:0;">{{ sujet.titre }}</h1>
+      <div id="minuteur" style="background:var(--navy); color:var(--blanc); padding:0.5rem 1rem; border-radius:8px; font-weight:700; font-size:1.1rem;">--:--</div>
+    </div>
+
+    {% if sujet.consignes %}
+      <p class="sous-titre">{{ sujet.consignes|linebreaksbr }}</p>
+    {% endif %}
+    <p style="color:var(--gris-texte); font-size:0.9rem;">
+      {{ sujet.nombre_questions }} question(s) · noté sur {{ sujet.note_totale }} · dès que le temps est écoulé, ta copie est envoyée automatiquement.
+    </p>
+
+    <form method="post" id="formulaire-sujet">
+      {% csrf_token %}
+
+      {% for question in questions %}
+        <div class="carte-site" style="margin-bottom:1rem;">
+          <p style="font-weight:700; margin:0 0 0.6rem;">
+            {{ forloop.counter }}. {{ question.enonce }}
+            <span style="color:var(--gold); font-weight:400; font-size:0.85rem;">({{ question.points }} pt{{ question.points|pluralize }})</span>
+          </p>
+
+          {% if question.type_question == 'courte' %}
+            <input type="text" name="question_{{ question.id }}" class="champ-texte" placeholder="Votre réponse">
+          {% else %}
+            {% for choix in question.choix_possibles.all %}
+              <label style="display:block; margin:0.3rem 0; font-weight:400;">
+                <input type="checkbox" name="question_{{ question.id }}" value="{{ choix.id }}">
+                {{ choix.texte }}
+              </label>
+            {% endfor %}
+          {% endif %}
+        </div>
+      {% endfor %}
+
+      <button type="submit" class="bouton bouton-navy">Soumettre ma copie</button>
+    </form>
+  </div>
+
+  <script>
+    (function () {
+      var secondesRestantes = {{ temps_restant_secondes }};
+      var affichage = document.getElementById('minuteur');
+      var formulaire = document.getElementById('formulaire-sujet');
+      var dejaSoumis = false;
+
+      function formater(s) {
+        s = Math.max(0, s);
+        var m = Math.floor(s / 60);
+        var sec = s % 60;
+        return (m < 10 ? '0' : '') + m + ':' + (sec < 10 ? '0' : '') + sec;
+      }
+
+      function actualiser() {
+        affichage.textContent = formater(secondesRestantes);
+        if (secondesRestantes <= 0 && !dejaSoumis) {
+          dejaSoumis = true;
+          affichage.textContent = "Temps écoulé";
+          formulaire.submit();
+          return;
+        }
+        secondesRestantes -= 1;
+        setTimeout(actualiser, 1000);
+      }
+
+      actualiser();
+
+      formulaire.addEventListener('submit', function () { dejaSoumis = true; });
+    })();
+  </script>
+{% endblock %}
