@@ -172,6 +172,14 @@ STORAGES = {
     },
 }
 
+# Alias "historiques" purement pour la compatibilité avec des packages qui ne
+# connaissent pas encore le nouveau réglage STORAGES (ex: django-cloudinary-
+# storage 0.3.0 lit encore STATICFILES_STORAGE dans sa commande collectstatic).
+# Django lui-même se base sur STORAGES ci-dessus, ces deux lignes ne changent
+# rien au comportement réel.
+STATICFILES_STORAGE = STORAGES["staticfiles"]["BACKEND"]
+DEFAULT_FILE_STORAGE = STORAGES["default"]["BACKEND"]
+
 MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
