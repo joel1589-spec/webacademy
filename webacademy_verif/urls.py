@@ -18,7 +18,11 @@ urlpatterns = [
     path('examens/', include('examens.urls')),
 ]
 
-if settings.DEBUG:
+if settings.DEBUG and not settings.USE_CLOUDINARY:
+    # En local sans Cloudinary configuré : on sert les médias depuis le
+    # disque, comme avant. En production (ou dès que Cloudinary est
+    # configuré), les fichiers sont hébergés et servis par Cloudinary lui-même
+    # via son CDN — inutile que Django s'en charge.
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 admin.site.site_header = "Web Academy — Administration"

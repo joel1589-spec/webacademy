@@ -47,7 +47,9 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'cloudinary_storage',
     'django.contrib.staticfiles',
+    'cloudinary',
 
     'core',
     'comptes',
@@ -133,16 +135,42 @@ STATICFILES_DIRS = [
     BASE_DIR / 'core' / 'static',
 ]
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+# --- Fichiers envoyés par les utilisateurs (photos de profil, documents, images) --
+#
+# Le disque de Render est éphémère (remis à zéro à chaque redéploiement ou
+# redémarrage du service). On stocke donc les médias uploadés depuis l'admin
+# (PDF, images...) sur Cloudinary, qui les conserve durablement et les sert
+# directement via son CDN (pas de charge supplémentaire sur le serveur Django).
+#
+# En local (DEBUG=True), si aucune clé Cloudinary n'est configurée, on retombe
+# sur le disque local pour ne pas bloquer le développement.
+
+USE_CLOUDINARY = bool(os.environ.get('CLOUDINARY_URL')) or bool(
+    os.environ.get('CLOUDINARY_CLOUD_NAME')
+)
+
+if USE_CLOUDINARY:
+    CLOUDINARY_STORAGE = {
+        'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME'),
+        'API_KEY': os.environ.get('CLOUDINARY_API_KEY'),
+        'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET'),
+        # Regroupe tous les fichiers de cette app dans un dossier dédié
+        # côté Cloudinary, pratique si le même compte sert plusieurs projets.
+        'PREFIX': 'webacademy',
+    }
+    DEFAULT_STORAGE_BACKEND = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+else:
+    DEFAULT_STORAGE_BACKEND = 'django.core.files.storage.FileSystemStorage'
+
 STORAGES = {
     "default": {
-        "BACKEND": "django.core.files.storage.FileSystemStorage",
+        "BACKEND": DEFAULT_STORAGE_BACKEND,
     },
     "staticfiles": {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
     },
 }
-
-# --- Fichiers envoyés par les utilisateurs (photos de profil, documents, images) --
 
 MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / 'media'
