@@ -1,6 +1,7 @@
-from django.contrib import admin
+from django.contrib import admin, messages
 
 from .models import Choix, Copie, Question, ReponseAcceptee, ReponseEtudiant, Sujet
+from .services import corriger_copie
 
 
 class ChoixInline(admin.TabularInline):
@@ -71,6 +72,7 @@ class CopieAdmin(admin.ModelAdmin):
     search_fields = ('etudiant__user__first_name', 'etudiant__user__last_name')
     readonly_fields = ('sujet', 'etudiant', 'date_debut', 'date_soumission', 'terminee')
     inlines = [ReponseEtudiantInline]
+    actions = ['recorriger_copies']
 
     @admin.display(description="Noté sur")
     def note_sur(self, obj):
@@ -78,3 +80,13 @@ class CopieAdmin(admin.ModelAdmin):
 
     def has_add_permission(self, request):
         return False
+
+    @admin.action(description="Recorriger la copie (relance la correction automatique)")
+    def recorriger_copies(self, request, queryset):
+        for copie in queryset:
+            corriger_copie(copie)
+        self.message_user(
+            request,
+            f"{queryset.count()} copie(s) recorrigée(s).",
+            level=messages.SUCCESS,
+        )
