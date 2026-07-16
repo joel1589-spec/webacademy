@@ -1,11 +1,14 @@
 """Correction automatique d'une copie, une fois soumise (ou le temps écoulé)."""
 
+import logging
 import unicodedata
 
 from django.conf import settings
 from django.utils import timezone
 
 from .models import Question
+
+logger = logging.getLogger(__name__)
 
 
 def _normaliser(texte):
@@ -52,20 +55,33 @@ def _ia_juge_correct(question, texte_etudiant, reponses_reference):
                 {"role": "system", "content": SYSTEM_PROMPT_CORRECTION},
                 {"role": "user", "content": message_utilisateur},
             ],
-            max_tokens=5,
+            max_tokens=20,
             temperature=0,
             timeout=15,
         )
     except Exception:
         # Panne, quota dépassé, clé absente, timeout... : on ne fait jamais
-        # planter la correction à cause d'un souci côté IA.
+        # planter la correction à cause d'un souci côté IA. On journalise
+        # quand même l'erreur complète pour pouvoir la diagnostiquer dans les
+        # logs Render (visible dans l'onglet "Logs" du service).
+        logger.exception(
+            "Échec de l'appel IA pour la correction de la question %s", question.pk
+        )
         return None
 
     verdict = (reponse.choices[0].message.content or "").strip().upper()
+    logger.info(
+        "Verdict IA pour la question %s : %r (réponse brute complète : %r)",
+        question.pk, verdict, reponse.choices[0].message.content,
+    )
     if verdict.startswith("INCORRECT"):
         return False
     if verdict.startswith("CORRECT"):
         return True
+    logger.warning(
+        "Verdict IA inattendu pour la question %s, ni CORRECT ni INCORRECT : %r",
+        question.pk, verdict,
+    )
     return None  # réponse inattendue de l'IA : on ne devine pas
 
 
